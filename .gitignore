@@ -31,4 +31,5 @@
 *.out
 *.app
 
-temp
+.idea
+cmake-build-debug
