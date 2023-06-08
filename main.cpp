@@ -1,6 +1,9 @@
-#include <iostream>
+#include "decoder.h"
+#include "encoder.h"
 
 int main() {
-    std::cout << "Hello, World!" << std::endl;
+    encode();
+    decode();
+    
     return 0;
 }
