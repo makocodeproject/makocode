@@ -198,45 +198,45 @@ MakoCode Specification (draft):
         - Then followed by the Data Payload, Hash, and ECC.
 
 Decoding algorithm basics (draft):
-    - All decoding parameters can be modified. Reasonable defaults will be determined. To get better eventual decoding, decoding will backtrack if a certainty threshold is not met at different points. We will usually search outward in a linear pattern on each side of the default value by the smallest increment.
-    - Assume that the data appears essentially random on page. Data is rectangular.
-    - General algorithm:
-        - Guess color depth by running a threshold of each channel. Guess shading bits are 1 by default.
-        - Run a histogram over the entire image. Starting from the middle gray value, walk outward until a local minimum is found. This will be referred to as the global-histogram-minimum, which should be the overall best starting guess for determining white vs black.
-        - The maximum on either end is the usually black pixel and usually white background color.
-        - Search for any boundary: Starting from the top-right corner of the image, calculate a moving average with a local window, which can be efficiently moved by 1 pixel in linear time, by adding in the new boundary line and removing the old boundary line. If the window is partially outside the image, those values are considered white. Walk the window to center at each pixel, and note any pixels where the average is within a percentage of the global-histogram-minimum.
-        - Refine boundaries: Take each left-most, right-most, top-most, and bottom-most point and calculate a local window with a histogram minimum and moving average. Walk those points outwards until the average is greater than the minimum, meaning a local boundary has been found. Remove the point from conisderation, add it to the refined boundaries list, and continue until all points have been processed. This helps when the image has fading.
-        - Using each border point's nearest neighbor, calculate the slope and y-intercept. Take the 4 largest clusters of slopes/y-intercepts to calculate the likely 4 border lines. For any point close enough to a border line, use it to calculate a polynomial fit line for the 4 borders. The intersection of the fit lines will yield four boundary points.
-            - The image could have hard-to-recover boundaries, for example if the entire boundary has been erased or smudged. We could still recover the data within, but only by randomly brute-force guessing an orientation. Possibly the matrix code-pixel orientation could be used as well to guess this.
-        - Guess an overall orientation of 0 degrees. There is also 90, 180, or 270 degrees.
-    - Determine grid step for each pixel: Starting from a corner pixel, get the horizontal and vertical grid step of the given pixel. Determine a local window moving average and histogram minimum. Using horizontal and vertical lines starting with the known angle of the border fit-lines. When the value shifts from black to/from white, assume this is the correct grid step. Optimize the angle by looking for where its calculated histogram max and min value are least (e.g. the line contains mostly gray boundary) - this doesn't work for black/white scans though.
-    - Halfway between the grid boundary should be the center, but it could also be shifted at each location. Can start with what appears to be a local peak max or min value. The pixel can use a weighted average of values starting from the center.
-    - DFS towards ECC, Hash, or fiducial data on each page along with a known ECC rate and threshold for failures seen. Decoding can backtrack if the data will not likely be recoverable (e.g. too much fiducial data is wrong). Between correct fiducial data, we can guess clipping, folding, erasures, dirt, noise, smudging, and other errors once enough fiducial data is obtained to be confident we're actually looking at the matrix code. Can use Needleman-Wunsch to figure out best alignment for some of these.
+- All decoding parameters can be modified. Reasonable defaults will be determined. To get better eventual decoding, decoding will backtrack if a certainty threshold is not met at different points. We will usually search outward in a linear pattern on each side of the default value by the smallest increment.
+- Assume that the data appears essentially random on page. Data is rectangular.
+- General algorithm:
+    - Guess color depth by running a threshold of each channel. Guess shading bits are 1 by default.
+    - Run a histogram over the entire image. Starting from the middle gray value, walk outward until a local minimum is found. This will be referred to as the global-histogram-minimum, which should be the overall best starting guess for determining white vs black.
+    - The maximum on either end is the usually black pixel and usually white background color.
+    - Search for any boundary: Starting from the top-right corner of the image, calculate a moving average with a local window, which can be efficiently moved by 1 pixel in linear time, by adding in the new boundary line and removing the old boundary line. If the window is partially outside the image, those values are considered white. Walk the window to center at each pixel, and note any pixels where the average is within a percentage of the global-histogram-minimum.
+    - Refine boundaries: Take each left-most, right-most, top-most, and bottom-most point and calculate a local window with a histogram minimum and moving average. Walk those points outwards until the average is greater than the minimum, meaning a local boundary has been found. Remove the point from conisderation, add it to the refined boundaries list, and continue until all points have been processed. This helps when the image has fading.
+    - Using each border point's nearest neighbor, calculate the slope and y-intercept. Take the 4 largest clusters of slopes/y-intercepts to calculate the likely 4 border lines. For any point close enough to a border line, use it to calculate a polynomial fit line for the 4 borders. The intersection of the fit lines will yield four boundary points.
+        - The image could have hard-to-recover boundaries, for example if the entire boundary has been erased or smudged. We could still recover the data within, but only by randomly brute-force guessing an orientation. Possibly the matrix code-pixel orientation could be used as well to guess this.
+    - Guess an overall orientation of 0 degrees. There is also 90, 180, or 270 degrees.
+- Determine grid step for each pixel: Starting from a corner pixel, get the horizontal and vertical grid step of the given pixel. Determine a local window moving average and histogram minimum. Using horizontal and vertical lines starting with the known angle of the border fit-lines. When the value shifts from black to/from white, assume this is the correct grid step. Optimize the angle by looking for where its calculated histogram max and min value are least (e.g. the line contains mostly gray boundary) - this doesn't work for black/white scans though.
+- Halfway between the grid boundary should be the center, but it could also be shifted at each location. Can start with what appears to be a local peak max or min value. The pixel can use a weighted average of values starting from the center.
+- DFS towards ECC, Hash, or fiducial data on each page along with a known ECC rate and threshold for failures seen. Decoding can backtrack if the data will not likely be recoverable (e.g. too much fiducial data is wrong). Between correct fiducial data, we can guess clipping, folding, erasures, dirt, noise, smudging, and other errors once enough fiducial data is obtained to be confident we're actually looking at the matrix code. Can use Needleman-Wunsch to figure out best alignment for some of these.
 
 Implementation notes (draft):
-    - Uses the GNU AGPLv3 license
-    - Language: C++ for the encoder and decoder. May use Python for prototyping or helper scripts.
-    - Code must be completely self-contained, meaning that any library function must be copied in locally as a fork, even stdlib. Possibly can use git submodules where possible, though hand copying and minifying/shrinking will provide the smallest and most stable result.
-    - Dependencies
-        - C++ draft specification: https://github.com/cplusplus/draft/tree/main/source
-        - Encryption: Veracrypt
-        - Random: Boost or stdlib
-        - Unit testing: Boost
-        - Reed Solomon: libcorrect
-        - LZMA compression/TAR: libarchive
-        - GPG: GnuPG
-        - Linter: Clang-tidy
-    - Image format: Portable PixMap (PPM) only, ASCII with 8 bits per color, e.g. 24-bits per pixel. ImageMagick or other will be needed to convert between formats. A simple external script can be provided as a suggestion.
-    - Metadata is output as a json file. Use an external script to merge metadata json output with data, e.g. to change the file settings in the OS.
-    - Ambiguity: Due to brute-force guessing, data can be ambiguous if Hash or ECC is too small or not supplied. This occurs even without physical damage. Thus brute-forcing cannot just return the first correct result, but must return all possible correct results, of which there may be many. We must modify input parameters to ensure that the subsequent results are different - we can Hash the entire output and add to a set in decoding to quickly verify this. Command line can limit from 1 to infinity as well.
-    - Calibration program that prints calibration pages, then scanned in to automatically determine best settings (e.g. high-density slow-decoding, balanced, low-density fast-decoding). Simply print seed-0 pseudorandom data in plain, which is quick to decode. Keep printing in higher density, possibly binary searching, to find maximum data density for this printer/scanner/computer combination, with no time limit.
-    - Alternately, a questionnaire to figure out best ECC settings. Note that a faster computer can brute-force faster, and a time-limit may be set.
-    - Page equality
-        - Unequal page sizes are not supported. Partial pages are not supported.
-        - By default, pad with extra fiducial/Hash/ECC bits so that there isn't junk data at the end.
-        - If pages need to be unequal, the user could always split their data manually and print a separate file per page size - or just use the smallest one.
-    - Tool to generate source code print - base decoder is in text, compression in uncompressed code, and everything else in compressed code. Compact option to just print full schema description, with all source in compressed code. Also print out g++ implementation in C++, and C++ ISO spec (latex draft). Minify and shrink all source code before printing and whitelist what goes in, possibly condense licensing into a summarized file with license type and name.
-    - Can write an optional header/footer on each page describing the filename and page number, possibly even some encoding settings and other metadata, filesize/ecc rate, etc.
-    - Run physical tests, check different printer/scanner/computer combinations and paper/film mediums. Leave data for a while, artificially age, different storage conditions, etc. Post findings.
-    - Decoder debug option to print out debug images/logs for each decoding step
-    - Fun: Script to create art in output that is actually readable. Possibly just apply matrix code steganographically to an input image.
+- Uses the GNU AGPLv3 license
+- Language: C++ for the encoder and decoder. May use Python for prototyping or helper scripts.
+- Code must be completely self-contained, meaning that any library function must be copied in locally as a fork, even stdlib. Possibly can use git submodules where possible, though hand copying and minifying/shrinking will provide the smallest and most stable result.
+- Dependencies
+    - C++ draft specification: https://github.com/cplusplus/draft/tree/main/source
+    - Encryption: Veracrypt
+    - Random: Boost or stdlib
+    - Unit testing: Boost
+    - Reed Solomon: libcorrect
+    - LZMA compression/TAR: libarchive
+    - GPG: GnuPG
+    - Linter: Clang-tidy
+- Image format: Portable PixMap (PPM) only, ASCII with 8 bits per color, e.g. 24-bits per pixel. ImageMagick or other will be needed to convert between formats. A simple external script can be provided as a suggestion.
+- Metadata is output as a json file. Use an external script to merge metadata json output with data, e.g. to change the file settings in the OS.
+- Ambiguity: Due to brute-force guessing, data can be ambiguous if Hash or ECC is too small or not supplied. This occurs even without physical damage. Thus brute-forcing cannot just return the first correct result, but must return all possible correct results, of which there may be many. We must modify input parameters to ensure that the subsequent results are different - we can Hash the entire output and add to a set in decoding to quickly verify this. Command line can limit from 1 to infinity as well.
+- Calibration program that prints calibration pages, then scanned in to automatically determine best settings (e.g. high-density slow-decoding, balanced, low-density fast-decoding). Simply print seed-0 pseudorandom data in plain, which is quick to decode. Keep printing in higher density, possibly binary searching, to find maximum data density for this printer/scanner/computer combination, with no time limit.
+- Alternately, a questionnaire to figure out best ECC settings. Note that a faster computer can brute-force faster, and a time-limit may be set.
+- Page equality
+    - Unequal page sizes are not supported. Partial pages are not supported.
+    - By default, pad with extra fiducial/Hash/ECC bits so that there isn't junk data at the end.
+    - If pages need to be unequal, the user could always split their data manually and print a separate file per page size - or just use the smallest one.
+- Tool to generate source code print - base decoder is in text, compression in uncompressed code, and everything else in compressed code. Compact option to just print full schema description, with all source in compressed code. Also print out g++ implementation in C++, and C++ ISO spec (latex draft). Minify and shrink all source code before printing and whitelist what goes in, possibly condense licensing into a summarized file with license type and name.
+- Can write an optional header/footer on each page describing the filename and page number, possibly even some encoding settings and other metadata, filesize/ecc rate, etc.
+- Run physical tests, check different printer/scanner/computer combinations and paper/film mediums. Leave data for a while, artificially age, different storage conditions, etc. Post findings.
+- Decoder debug option to print out debug images/logs for each decoding step
+- Fun: Script to create art in output that is actually readable. Possibly just apply matrix code steganographically to an input image.
