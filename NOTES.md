@@ -239,4 +239,6 @@ Implementation notes (draft):
 - Can write an optional header/footer on each page describing the filename and page number, possibly even some encoding settings and other metadata, filesize/ecc rate, etc.
 - Run physical tests, check different printer/scanner/computer combinations and paper/film mediums. Leave data for a while, artificially age, different storage conditions, etc. Post findings.
 - Decoder debug option to print out debug images/logs for each decoding step
+- Executable should be standalone/static, strip/compress it
+- Fork all dependencies recursively into github account and submodule from them.
 - Fun: Script to create art in output that is actually readable. Possibly just apply matrix code steganographically to an input image.
