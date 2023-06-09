@@ -9,7 +9,7 @@ using namespace std;
 #ifndef MAKOCODE_DECODER_H
 #define MAKOCODE_DECODER_H
 
-void decode() {
+int decode() {
     ifstream file;
     file.open ("image.ppm");
 
@@ -23,6 +23,8 @@ void decode() {
     file.close();
 
     std::cout << "Image file read, " << line_count << " lines." << std::endl;
+
+    return line_count;
 }
 
 #endif //MAKOCODE_DECODER_H

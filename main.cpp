@@ -2,7 +2,7 @@
 #include "encoder.h"
 
 int main() {
-    encode();
+    encode(1000, 1000);
     decode();
     
     return 0;

@@ -9,22 +9,23 @@
 #ifndef MAKOCODE_ENCODER_H
 #define MAKOCODE_ENCODER_H
 
-void encode() {
+int RGB_CHANNEL_COUNT = 3;
+int PPM_HEADER_WORDS = 4;
+
+void encode(int height, int width) {
     mt19937 generator (0);
 
     ofstream file;
     file.open ("image.ppm");
-    int w = 1000;
-    int h = 1000;
     int min_val = 0;
     int max_val = 255;
 
     uniform_real_distribution<double> dis(min_val, max_val + 1);
 
-    file << "P3\n" << w << "\n" << h << "\n" << max_val;
+    file << "P3\n" << width << "\n" << height << "\n" << max_val;
 
-    for (int i = 0; i < w * h * 3; i++) {
-        if (i % 3 == 0) {
+    for (int i = 0; i < width * height * RGB_CHANNEL_COUNT; i++) {
+        if (i % RGB_CHANNEL_COUNT == 0) {
             file << "\n";
         }
 
