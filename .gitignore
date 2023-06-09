@@ -31,5 +31,13 @@
 *.out
 *.app
 
+# IDE
 .idea
+
+# CMake
+*.cmake
+CMakeCache.txt
+CMakeFiles
+Makefile
 cmake-build-debug
+Testing
