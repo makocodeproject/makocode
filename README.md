@@ -3,7 +3,8 @@ A simple standard for color barcode printing with maximal density, maximal resil
 
 Currently this project is just a specification draft with no implementation.
 
-# Build
+# Build/Test
 
     cmake .
     make
+    ctest
