@@ -7,4 +7,4 @@ enable_testing()
 
 add_subdirectory(tests)
 
-add_executable(makocode main.cpp encoder.h decoder.h)
+add_executable(makocode main.cpp encoder.h decoder.h mt19937/mt19937.cpp mt19937/mt19937.h)

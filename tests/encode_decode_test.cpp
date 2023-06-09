@@ -2,7 +2,7 @@
 // Created by justi on 6/8/2023.
 //
 
-#include <assert.h>
+#include <cassert>
 
 #include "../decoder.h"
 #include "../encoder.h"
@@ -12,8 +12,8 @@ int main() {
     int height = 1000;
 
     encode(height, width);
-    int linecount = decode();
-    assert(linecount == RGB_CHANNEL_COUNT * width * height + PPM_HEADER_WORDS);
+    int line_count = decode();
+    assert(line_count == RGB_CHANNEL_COUNT * width * height + PPM_HEADER_WORDS);
 
     return 0;
 }

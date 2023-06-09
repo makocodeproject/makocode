@@ -2,9 +2,10 @@
 // Created by justi on 6/7/2023.
 //
 
+#include "mt19937/mt19937.h"
+
 #include <iostream>
 #include <fstream>
-#include <random>
 
 #ifndef MAKOCODE_ENCODER_H
 #define MAKOCODE_ENCODER_H
@@ -13,14 +14,11 @@ int RGB_CHANNEL_COUNT = 3;
 int PPM_HEADER_WORDS = 4;
 
 void encode(int height, int width) {
-    mt19937 generator (0);
+    seed(0);
 
     ofstream file;
     file.open ("image.ppm");
-    int min_val = 0;
     int max_val = 255;
-
-    uniform_real_distribution<double> dis(min_val, max_val + 1);
 
     file << "P3\n" << width << "\n" << height << "\n" << max_val;
 
@@ -29,7 +27,7 @@ void encode(int height, int width) {
             file << "\n";
         }
 
-        file << int(dis(generator)) << " ";
+        file << int(rand_u32() % (max_val + 1)) << " ";
     }
 
     file.close();
