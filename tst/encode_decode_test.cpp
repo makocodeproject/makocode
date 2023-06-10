@@ -4,8 +4,8 @@
 
 #include <cassert>
 
-#include "../decoder.h"
-#include "../encoder.h"
+#include "../src/makocode/decoder.hpp"
+#include "../src/makocode/encoder.hpp"
 
 int main() {
     int width = 1000;

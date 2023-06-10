@@ -12,8 +12,8 @@
  * 2015-02-17, 2017-12-06
  */
 
-#ifndef MAKOCODE_MT19937_H
-#define MAKOCODE_MT19937_H
+#ifndef MAKOCODE_MT19937_HPP
+#define MAKOCODE_MT19937_HPP
 
 #include <cstdint>
 
@@ -29,4 +29,4 @@ uint32_t rand_u32();
  */
 void seed(uint32_t seed_value);
 
-#endif //MAKOCODE_MT19937_H
+#endif //MAKOCODE_MT19937_HPP

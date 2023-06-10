@@ -1,5 +1,5 @@
-#include "decoder.h"
-#include "encoder.h"
+#include "decoder.hpp"
+#include "encoder.hpp"
 
 int main() {
     encode(1000, 1000);

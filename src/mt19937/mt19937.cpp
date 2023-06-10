@@ -12,7 +12,7 @@
  * 2015-02-17, 2017-12-06
  */
 
-#include "mt19937.h"
+#include "mt19937.hpp"
 
 /*
  * We have an array of 624 32-bit values, and there are 31 unused bits, so we

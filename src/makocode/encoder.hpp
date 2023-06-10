@@ -2,7 +2,7 @@
 // Created by justi on 6/7/2023.
 //
 
-#include "mt19937/mt19937.h"
+#include "../mt19937/mt19937.hpp"
 
 #include <iostream>
 #include <fstream>

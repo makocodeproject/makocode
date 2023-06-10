@@ -5,6 +5,13 @@ set(CMAKE_CXX_STANDARD 23)
 
 enable_testing()
 
-add_subdirectory(tests)
+add_subdirectory(tst)
 
-add_executable(makocode main.cpp encoder.h decoder.h mt19937/mt19937.cpp mt19937/mt19937.h)
+add_executable(
+        makocode
+        src/makocode/main.cpp
+        src/makocode/encoder.hpp
+        src/makocode/decoder.hpp
+        src/mt19937/mt19937.hpp
+        src/mt19937/mt19937.cpp
+)
