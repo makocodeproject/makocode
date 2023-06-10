@@ -42,3 +42,6 @@ CMakeFiles
 Makefile
 cmake-build-debug
 Testing
+
+# Images
+*.ppm

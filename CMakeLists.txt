@@ -9,7 +9,7 @@ add_subdirectory(tst)
 
 add_executable(
         makocode
-        src/makocode/main.cpp
+        src/makocode/cmd.cpp
         src/makocode/encoder.hpp
         src/makocode/decoder.hpp
         src/mt19937/mt19937.hpp

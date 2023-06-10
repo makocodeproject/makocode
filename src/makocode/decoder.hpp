@@ -13,18 +13,18 @@ int decode() {
     ifstream file;
     file.open ("image.ppm");
 
-    int line_count = 0;
+    int word_count = 0;
     string line;
 
     while (file >> line) {
-        line_count++;
+        word_count++;
     }
 
     file.close();
 
-    std::cout << "Image file read, " << line_count << " lines." << std::endl;
+    std::cout << "Image file read, " << word_count << " words." << std::endl;
 
-    return line_count;
+    return word_count;
 }
 
 #endif //MAKOCODE_DECODER_H

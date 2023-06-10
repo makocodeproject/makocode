@@ -241,4 +241,6 @@ Implementation notes (draft):
 - Decoder debug option to print out debug images/logs for each decoding step
 - Executable should be standalone/static, strip/compress it
 - Fork all dependencies recursively into github account and submodule from them.
+- Aim for backwards compatibility in each version, keep a list of supported options per version.
+- Aim to rewrite all dependencies internally over time.
 - Fun: Script to create art in output that is actually readable. Possibly just apply matrix code steganographically to an input image.
