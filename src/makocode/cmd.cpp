@@ -2,7 +2,7 @@
 #include "encoder.hpp"
 #include "../cxxopts/cxxopts.hpp"
 
-int main(int argc, char** argv) {
+int cmd(int argc, const char** argv) {
     const string ENCODE_SUBPROGRAM = "encode";
     const string DECODE_SUBPROGRAM = "decode";
 
@@ -34,13 +34,9 @@ int main(int argc, char** argv) {
 
         int height;
         int width;
-        try {
-            height = result_encode["height"].as<int>();
-            width = result_encode["width"].as<int>();
-        } catch (cxxopts::exceptions::option_has_no_value& e) {
-            std::cout << "Error:\n" << e.what() << "\n\n" << options_encode.help() << std::endl;
-            return 1;
-        }
+
+        height = result_encode["height"].as<int>();
+        width = result_encode["width"].as<int>();
 
         encode(height, width);
     } else if (subprogram == DECODE_SUBPROGRAM) {
@@ -48,6 +44,8 @@ int main(int argc, char** argv) {
     } else {
         cout << "Unknown subprogram: " << subprogram << "\n";
         cout << USAGE_STRING;
+
+        return 1;
     }
 
     return 0;

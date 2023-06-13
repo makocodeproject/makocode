@@ -14,4 +14,6 @@ add_executable(
         src/makocode/decoder.hpp
         src/mt19937/mt19937.hpp
         src/mt19937/mt19937.cpp
-        src/cxxopts/cxxopts.hpp)
+        src/cxxopts/cxxopts.hpp
+        src/makocode/main.cpp
+        src/makocode/cmd.hpp)
