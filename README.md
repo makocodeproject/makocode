@@ -16,3 +16,4 @@ Currently, this project is just a specification draft with no working implementa
     cmake .
     make
     ctest
+    ./makocode
