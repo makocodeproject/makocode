@@ -7,6 +7,10 @@ Inu, Mako 🐕.
 
 Currently, this project is just a specification draft with no working implementation.
 
+# Status
+
+[![CMake](https://github.com/makocodeproject/makocode/actions/workflows/cmake.yml/badge.svg)](https://github.com/makocodeproject/makocode/actions/workflows/cmake.yml)
+
 # Build/Test
 
     cmake .
