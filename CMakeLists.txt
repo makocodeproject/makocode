@@ -14,6 +14,7 @@ add_executable(
         src/makocode/decoder.hpp
         src/pcg/pcg_random.hpp
         src/pcg/pcg_extras.hpp
+        src/pcg/pcg_uint128.hpp
         src/cxxopts/cxxopts.hpp
         src/makocode/main.cpp
         src/makocode/cmd.hpp)

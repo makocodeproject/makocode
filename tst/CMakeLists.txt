@@ -5,6 +5,7 @@ add_executable(
         ../src/makocode/encoder.hpp
         ../src/pcg/pcg_random.hpp
         ../src/pcg/pcg_extras.hpp
+        ../src/pcg/pcg_uint128.hpp
 )
 
 add_executable(
@@ -14,6 +15,7 @@ add_executable(
         ../src/makocode/cmd.cpp
         ../src/pcg/pcg_random.hpp
         ../src/pcg/pcg_extras.hpp
+        ../src/pcg/pcg_uint128.hpp
 )
 
 add_test(NAME encode_decode_test COMMAND encode_decode_test)
