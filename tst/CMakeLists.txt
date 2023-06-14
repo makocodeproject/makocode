@@ -1,19 +1,19 @@
 add_executable(
         encode_decode_test
-        encode_decode_test.cpp
+        makocode/encode_decode_test.cpp
         ../src/makocode/decoder.hpp
         ../src/makocode/encoder.hpp
-        ../src/mt19937/mt19937.hpp
-        ../src/mt19937/mt19937.cpp
+        ../src/pcg/pcg_random.hpp
+        ../src/pcg/pcg_extras.hpp
 )
 
 add_executable(
         cmd_test
-        cmd_test.cpp
+        makocode/cmd_test.cpp
         ../src/makocode/cmd.hpp
         ../src/makocode/cmd.cpp
-        ../src/mt19937/mt19937.hpp
-        ../src/mt19937/mt19937.cpp
+        ../src/pcg/pcg_random.hpp
+        ../src/pcg/pcg_extras.hpp
 )
 
 add_test(NAME encode_decode_test COMMAND encode_decode_test)

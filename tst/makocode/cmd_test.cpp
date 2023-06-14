@@ -4,7 +4,7 @@
 
 #include <cassert>
 
-#include "../src/makocode/cmd.hpp"
+#include "../../src/makocode/cmd.hpp"
 
 int cmd_none() {
     return !cmd(0, nullptr);

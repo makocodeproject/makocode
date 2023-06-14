@@ -1,3 +1,5 @@
 TODO:
-- Support PCG PRNG, which supports jumping. Check with TestU01.
-- Add unit testing for dependencies
+- 100% dependency code coverage
+  - Add dependent library unit testing
+  - Edge cases for cmd argument parsing.
+  - Trim unused code.

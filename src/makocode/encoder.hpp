@@ -2,7 +2,7 @@
 // Created by justi on 6/7/2023.
 //
 
-#include "../mt19937/mt19937.hpp"
+#include "../pcg/pcg_random.hpp"
 
 #include <iostream>
 #include <fstream>
@@ -14,7 +14,7 @@ int RGB_CHANNEL_COUNT = 3;
 int PPM_HEADER_WORDS = 4;
 
 void encode(int height, int width) {
-    seed(0);
+    pcg32 rng(0);
 
     ofstream file;
     file.open ("image.ppm");
@@ -27,7 +27,7 @@ void encode(int height, int width) {
             file << "\n";
         }
 
-        file << int(rand_u32() % (max_val + 1)) << " ";
+        file << int(rng(max_val + 1)) << " ";
     }
 
     file.close();
