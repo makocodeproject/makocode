@@ -18,5 +18,23 @@ add_executable(
         ../src/pcg/pcg_uint128.hpp
 )
 
+add_executable(
+        pcg_test
+        pcg/pcg_test.cpp
+        ../src/pcg/pcg_random.hpp
+        ../src/pcg/pcg_extras.hpp
+        ../src/pcg/pcg_uint128.hpp
+)
+
+add_executable(
+        pcg_uint128_test
+        pcg/pcg_uint128_test.cpp
+        ../src/pcg/pcg_random.hpp
+        ../src/pcg/pcg_extras.hpp
+        ../src/pcg/pcg_uint128.hpp
+)
+
 add_test(NAME encode_decode_test COMMAND encode_decode_test)
 add_test(NAME cmd_test COMMAND cmd_test)
+add_test(NAME pcg_test COMMAND pcg_test)
+add_test(NAME pcg_uint128_test COMMAND pcg_uint128_test)

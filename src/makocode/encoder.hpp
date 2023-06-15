@@ -14,7 +14,7 @@ int RGB_CHANNEL_COUNT = 3;
 int PPM_HEADER_WORDS = 4;
 
 void encode(int height, int width) {
-    pcg32 rng(0);
+    pcg64 rng(0);
 
     ofstream file;
     file.open ("image.ppm");
@@ -27,7 +27,7 @@ void encode(int height, int width) {
             file << "\n";
         }
 
-        file << int(rng(max_val + 1)) << " ";
+        file << uint64_t (rng(max_val + 1)) << " ";
     }
 
     file.close();

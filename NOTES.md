@@ -13,6 +13,7 @@ MakoCode Specification (draft):
                 - The actual address size is 6 plus the value of the address size.
                 - Minimum address size is 0b000=0, given an address size-size of 0, meaning that this matrix code can address at least 2^6 bits.
                 - Maximum value is 0b111111=63 with address size-size of 3, meaning that this matrix code can address at most ~2^69 bits, or 512 exabytes.
+                - The current implementation will support only 2^64 bits. More could be supported with big integers.
             - The values will be as small as is possible, e.g. the address-size is ceiling(log2(entire matrix code size in bits + 1)) - 6
         - Address index Payload
             - The starting address of each region of the file after the address index, uncompressed.
@@ -142,10 +143,10 @@ MakoCode Specification (draft):
                 - Values 31-33: Mask mode
                     - Value 0: No mask mode.
                     - Value 1: XOR matrix code with alternating 0 and 1.
-                    - Value 2: XOR matrix code with mersenne twister seed 0.
+                    - Value 2: XOR matrix code with PCG-64 seed-0.
                 - Values 34-36: Data shuffle mode
                     - Value 0: No shuffling. Data is written per page, in English reading order, e.g. starting from top left, going right, then continuing down, ending at bottom right.
-                    - Value 1: Fisher-yates shuffle with Mersenne Twister. The algorithm proceeds forward, so finding the expected location of the first bits, likely including the fiducial data, is very fast. Page order is shuffled using seed-0. The position on each page is shuffled using a seed of page-number. Thus fiducial data, per-page-hash, or other per-page data can be spread equally across pages by making it a multiple of number of pages. Otherwise it would have a normal distribution and some pages would be harder to read. Each page has a different shuffled order, which makes it more resilient to physical damage.
+                    - Value 1: Fisher-yates shuffle with PCG-64 seed-0. The algorithm proceeds forward, so finding the expected location of the first bits, likely including the fiducial data, is very fast. Page order is shuffled using seed-0. The position on each page is shuffled using a seed of page-number. Thus fiducial data, per-page-hash, or other per-page data can be spread equally across pages by making it a multiple of number of pages. Otherwise it would have a normal distribution and some pages would be harder to read. Each page has a different shuffled order, which makes it more resilient to physical damage.
                 - Values 37-39: Non-Data Compression
                     - Value 0: No compression
                     - Value 1: LZMA Compression of individual atomic values within address table, encoder data, metadata, except for address size-size.
@@ -159,7 +160,7 @@ MakoCode Specification (draft):
                     - Value 0: Rabin-Karp rolling hash, base-2 (per bit), then with bitwise not.
                         - Bitwise not helps the case where small values, mostly 0's, are then matched with erroneous whitespace. Allows for sequential bits to be computed on the fly, and then efficiently rolled back during backtracking. Given a size N, the number of bits dedicated for the Hash, we will find the largest prime modulo that can fit. We will use a sieve to generate it, but will provide precalculated values up to ~2^64. Note that CRC bits should generally be greater than log2(size of data). Thus precalculating up to 256 is also technically possible to be used, given the maximum file size.
                 - Values 46-48: Fiducial data mode
-                    - Value 0: Mersenne Twister seed-0 modulo 2.
+                    - Value 0: PCG-64 seed-0.
                 - Values 49-51: Data compression mode
                     - Value 0 or missing: No compression
                     - Value 1: LZMA
