@@ -13,7 +13,6 @@ Currently, this project is just a specification draft with no working implementa
 
 # Build/Test
 
-    cmake .
-    make
+    cmake --build .
     ctest
     ./makocode
