@@ -6,6 +6,8 @@
 
 #include "../../src/pcg/pcg_random.hpp"
 
+#include <array>
+
 void pcg64_uint128_consistent() {
     pcg64 rng(0);
 
