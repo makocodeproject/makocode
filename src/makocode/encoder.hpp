@@ -2,37 +2,9 @@
 // Created by justi on 6/7/2023.
 //
 
-#include "../pcg/pcg_random.hpp"
-
-#include <iostream>
-#include <fstream>
-
 #ifndef MAKOCODE_ENCODER_H
 #define MAKOCODE_ENCODER_H
 
-int RGB_CHANNEL_COUNT = 3;
-int PPM_HEADER_WORDS = 4;
-
-void encode(int height, int width) {
-    pcg64 rng(0);
-
-    ofstream file;
-    file.open ("image.ppm");
-    int max_val = 255;
-
-    file << "P3\n" << width << "\n" << height << "\n" << max_val;
-
-    for (int i = 0; i < width * height * RGB_CHANNEL_COUNT; i++) {
-        if (i % RGB_CHANNEL_COUNT == 0) {
-            file << "\n";
-        }
-
-        file << uint64_t (rng(max_val + 1)) << " ";
-    }
-
-    file.close();
-
-    std::cout << "Image file written." << std::endl;
-}
+void encode(int height, int width);
 
 #endif //MAKOCODE_ENCODER_H

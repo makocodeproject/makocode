@@ -9,12 +9,16 @@ add_subdirectory(tst)
 
 add_executable(
         makocode
-        src/makocode/cmd.cpp
-        src/makocode/encoder.hpp
-        src/makocode/decoder.hpp
-        src/pcg/pcg_random.hpp
-        src/pcg/pcg_extras.hpp
-        src/pcg/pcg_uint128.hpp
         src/cxxopts/cxxopts.hpp
+        src/makocode/cmd.cpp
+        src/makocode/cmd.hpp
+        src/makocode/constants.hpp
+        src/makocode/decoder.cpp
+        src/makocode/decoder.hpp
+        src/makocode/encoder.cpp
+        src/makocode/encoder.hpp
         src/makocode/main.cpp
-        src/makocode/cmd.hpp)
+        src/pcg/pcg_extras.hpp
+        src/pcg/pcg_random.hpp
+        src/pcg/pcg_uint128.hpp
+)

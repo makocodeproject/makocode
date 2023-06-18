@@ -4,6 +4,7 @@
 
 #include "cassert"
 
+#include "../../src/makocode/constants.hpp"
 #include "../../src/makocode/decoder.hpp"
 #include "../../src/makocode/encoder.hpp"
 
