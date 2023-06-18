@@ -9,23 +9,30 @@
 #include "../../src/makocode/encoder.hpp"
 
 void encode_decode_1000_1000() {
-    int width = 1000;
-    int height = 1000;
+    uint64_t pageHeightDots = 1000;
+    uint64_t pageWidthDots = 1000;
 
-    encode(height, width);
+    EncoderParameters encoderParameters = EncoderParameters(
+            pageHeightDots,
+            pageWidthDots);
+    encode(encoderParameters);
     int line_count = decode();
 
-    assert(line_count == RGB_CHANNEL_COUNT * width * height + PPM_HEADER_WORDS);
+    assert(line_count == RGB_CHANNEL_COUNT * pageHeightDots * pageWidthDots + PPM_HEADER_WORDS);
 }
 
 void encode_decode_100_100() {
-    int width = 100;
-    int height = 100;
+    uint64_t pageHeightDots = 100;
+    uint64_t pageWidthDots = 100;
 
-    encode(height, width);
+    EncoderParameters encoderParameters = EncoderParameters(
+            pageHeightDots,
+            pageWidthDots);
+
+    encode(encoderParameters);
     int line_count = decode();
 
-    assert(line_count == RGB_CHANNEL_COUNT * width * height + PPM_HEADER_WORDS);
+    assert(line_count == RGB_CHANNEL_COUNT * pageHeightDots * pageWidthDots + PPM_HEADER_WORDS);
 }
 
 int main() {

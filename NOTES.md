@@ -9,7 +9,7 @@ MakoCode Specification (draft):
                 - For example, a value of 0b10=2 means we use 2+3=5 bits in the address-size.
                 - Minimum value 0, or 3 address-size bits, and maximum value 3, or 6 address-size bits.
             - Value 1: Address size
-                - Using the number of bits in the first value, determines how many bits are used for the address indicies later in this section.
+                - Using the number of bits in the first value, determines how many bits are used for the address indices later in this section.
                 - The actual address size is 6 plus the value of the address size.
                 - Minimum address size is 0b000=0, given an address size-size of 0, meaning that this matrix code can address at least 2^6 bits.
                 - Maximum value is 0b111111=63 with address size-size of 3, meaning that this matrix code can address at most ~2^69 bits, or 512 exabytes.
@@ -27,7 +27,7 @@ MakoCode Specification (draft):
                 - Data section
                 - The bit after the end of the entire matrix code
         - Address size and size-size Hash
-            - Always starts at a constant address detemined by address size and size-size: (2) + (address size-size + 3) + (8 * (address size + 6))
+            - Always starts at a constant address determined by address size and size-size: (2) + (address size-size + 3) + (8 * (address size + 6))
         - Address size and size-size ECC
         - Address index Hash
         - Address index ECC
@@ -59,7 +59,7 @@ MakoCode Specification (draft):
                     - Includes the major, minor, and revision version of the encoder at the time of writing. Each version uses exactly one-third of the address space designated.
                 - Values 7-9: Page count
                 - Values 10-12: Dimensions
-                    - A pair of values, height and then width of the data on each page measured in pixels. Each value will take exactly half of the address space designated.
+                    - A pair of values, pageHeightDots and then pageWidthDots of the data on each page measured in dots. Each value will take exactly half of the address space designated.
                 - Values 13-15: Dot fill coverage
                     - 3 fixed bits for dot fill coverage size-size. Add 2 to get size.
                     - Then size bits plus 1 to get digit bits.
@@ -97,7 +97,7 @@ MakoCode Specification (draft):
                         - For the 5 state example of WCMYB below, replace the input data as follows:
                             - White: 00
                             - Cyan: 01
-                            - Magneta: 10
+                            - Magenta: 10
                             - Yellow: 11
                             - Black: 000
                             - Thus the data 1001000001 would be written: Magenta, Cyan, Black, White, Magenta (0-padded)
@@ -127,8 +127,8 @@ MakoCode Specification (draft):
                     - Provide one screen angle per color, to handle this common printer setting. Dots will be printed at an angle per each color.
                     - Starts with 4 fixed bits for size-size. Add 1 to get the size bits.
                     - Then size bits plus 1 to get the number of digits.
-                    - Two digits per color, numerator and denomiator, which divided gives the fraction of 360 degrees to rotate counter-clockwise of 0 degrees (pointing to the right).
-                    - Note 0 and 1 are always equal. Add 1 to denomiator, as it cannot be 0.
+                    - Two digits per color, numerator and denominator, which divided gives the fraction of 360 degrees to rotate counter-clockwise of 0 degrees (pointing to the right).
+                    - Note 0 and 1 are always equal. Add 1 to denominator, as it cannot be 0.
                     - Example:
                         - Size-size 0b0000=0, size=0b0, 1-bit per color screen angle. A value of 0 or 1 only.
                             - Numerator 0, denominator 0 is 0/1, or 0 degrees rotation.
@@ -146,7 +146,7 @@ MakoCode Specification (draft):
                     - Value 2: XOR matrix code with PCG-64 seed-0.
                 - Values 34-36: Data shuffle mode
                     - Value 0: No shuffling. Data is written per page, in English reading order, e.g. starting from top left, going right, then continuing down, ending at bottom right.
-                    - Value 1: Fisher-yates shuffle with PCG-64 seed-0. The algorithm proceeds forward, so finding the expected location of the first bits, likely including the fiducial data, is very fast. Page order is shuffled using seed-0. The position on each page is shuffled using a seed of page-number. Thus fiducial data, per-page-hash, or other per-page data can be spread equally across pages by making it a multiple of number of pages. Otherwise it would have a normal distribution and some pages would be harder to read. Each page has a different shuffled order, which makes it more resilient to physical damage.
+                    - Value 1: Fisher-yates shuffle with PCG-64 seed-0. The algorithm proceeds forward, so finding the expected location of the first bits, likely including the fiducial data, is very fast. Page order is shuffled using seed-0. The position on each page is shuffled using a seed of page-number. Thus, fiducial data, per-page-hash, or other per-page data can be spread equally across pages by making it a multiple of number of pages. Otherwise, it would have a normal distribution and some pages would be harder to read. Each page has a different shuffled order, which makes it more resilient to physical damage.
                 - Values 37-39: Non-Data Compression
                     - Value 0: No compression
                     - Value 1: LZMA Compression of individual atomic values within address table, encoder data, metadata, except for address size-size.
@@ -206,13 +206,13 @@ Decoding algorithm basics (draft):
     - Run a histogram over the entire image. Starting from the middle gray value, walk outward until a local minimum is found. This will be referred to as the global-histogram-minimum, which should be the overall best starting guess for determining white vs black.
     - The maximum on either end is the usually black pixel and usually white background color.
     - Search for any boundary: Starting from the top-right corner of the image, calculate a moving average with a local window, which can be efficiently moved by 1 pixel in linear time, by adding in the new boundary line and removing the old boundary line. If the window is partially outside the image, those values are considered white. Walk the window to center at each pixel, and note any pixels where the average is within a percentage of the global-histogram-minimum.
-    - Refine boundaries: Take each left-most, right-most, top-most, and bottom-most point and calculate a local window with a histogram minimum and moving average. Walk those points outwards until the average is greater than the minimum, meaning a local boundary has been found. Remove the point from conisderation, add it to the refined boundaries list, and continue until all points have been processed. This helps when the image has fading.
+    - Refine boundaries: Take each left-most, right-most, top-most, and bottom-most point and calculate a local window with a histogram minimum and moving average. Walk those points outwards until the average is greater than the minimum, meaning a local boundary has been found. Remove the point from consideration, add it to the refined boundaries list, and continue until all points have been processed. This helps when the image has fading.
     - Using each border point's nearest neighbor, calculate the slope and y-intercept. Take the 4 largest clusters of slopes/y-intercepts to calculate the likely 4 border lines. For any point close enough to a border line, use it to calculate a polynomial fit line for the 4 borders. The intersection of the fit lines will yield four boundary points.
         - The image could have hard-to-recover boundaries, for example if the entire boundary has been erased or smudged. We could still recover the data within, but only by randomly brute-force guessing an orientation. Possibly the matrix code-pixel orientation could be used as well to guess this.
     - Guess an overall orientation of 0 degrees. There is also 90, 180, or 270 degrees.
 - Determine grid step for each pixel: Starting from a corner pixel, get the horizontal and vertical grid step of the given pixel. Determine a local window moving average and histogram minimum. Using horizontal and vertical lines starting with the known angle of the border fit-lines. When the value shifts from black to/from white, assume this is the correct grid step. Optimize the angle by looking for where its calculated histogram max and min value are least (e.g. the line contains mostly gray boundary) - this doesn't work for black/white scans though.
 - Halfway between the grid boundary should be the center, but it could also be shifted at each location. Can start with what appears to be a local peak max or min value. The pixel can use a weighted average of values starting from the center.
-- DFS towards ECC, Hash, or fiducial data on each page along with a known ECC rate and threshold for failures seen. Decoding can backtrack if the data will not likely be recoverable (e.g. too much fiducial data is wrong). Between correct fiducial data, we can guess clipping, folding, erasures, dirt, noise, smudging, and other errors once enough fiducial data is obtained to be confident we're actually looking at the matrix code. Can use Needleman-Wunsch to figure out best alignment for some of these.
+- DFS towards ECC, Hash, or fiducial data on each page along with a known ECC rate and threshold for failures seen. Decoding can backtrack if the data will not likely be recoverable (e.g. too much fiducial data is wrong). Between correct fiducial data, we can guess clipping, folding, erasures, dirt, noise, smudging, and other errors once enough fiducial data is obtained to be confident we're actually looking at the matrix code. Can use Needleman-Wunsch to figure out the best alignment for some of these.
 
 Implementation notes (draft):
 - Uses the GNU AGPLv3 license
@@ -230,8 +230,8 @@ Implementation notes (draft):
 - Image format: Portable PixMap (PPM) only, ASCII with 8 bits per color, e.g. 24-bits per pixel. ImageMagick or other will be needed to convert between formats. A simple external script can be provided as a suggestion.
 - Metadata is output as a json file. Use an external script to merge metadata json output with data, e.g. to change the file settings in the OS.
 - Ambiguity: Due to brute-force guessing, data can be ambiguous if Hash or ECC is too small or not supplied. This occurs even without physical damage. Thus brute-forcing cannot just return the first correct result, but must return all possible correct results, of which there may be many. We must modify input parameters to ensure that the subsequent results are different - we can Hash the entire output and add to a set in decoding to quickly verify this. Command line can limit from 1 to infinity as well.
-- Calibration program that prints calibration pages, then scanned in to automatically determine best settings (e.g. high-density slow-decoding, balanced, low-density fast-decoding). Simply print seed-0 pseudorandom data in plain, which is quick to decode. Keep printing in higher density, possibly binary searching, to find maximum data density for this printer/scanner/computer combination, with no time limit.
-- Alternately, a questionnaire to figure out best ECC settings. Note that a faster computer can brute-force faster, and a time-limit may be set.
+- Calibration program that prints calibration pages, then scanned in to automatically determine the best settings (e.g. high-density slow-decoding, balanced, low-density fast-decoding). Simply print seed-0 pseudorandom data in plain, which is quick to decode. Keep printing in higher density, possibly binary searching, to find maximum data density for this printer/scanner/computer combination, with no time limit.
+- Alternately, a questionnaire to figure out the best ECC settings. Note that a faster computer can brute-force faster, and a time-limit may be set.
 - Page equality
     - Unequal page sizes are not supported. Partial pages are not supported.
     - By default, pad with extra fiducial/Hash/ECC bits so that there isn't junk data at the end.
@@ -241,7 +241,7 @@ Implementation notes (draft):
 - Run physical tests, check different printer/scanner/computer combinations and paper/film mediums. Leave data for a while, artificially age, different storage conditions, etc. Post findings.
 - Decoder debug option to print out debug images/logs for each decoding step
 - Executable should be standalone/static, strip/compress it
-- Fork all dependencies recursively into github account and submodule from them.
+- Fork all dependencies recursively into GitHub account and submodule from them.
 - Aim for backwards compatibility in each version, keep a list of supported options per version.
 - Aim to rewrite all dependencies internally over time.
 - Fun: Script to create art in output that is actually readable. Possibly just apply matrix code steganographically to an input image.

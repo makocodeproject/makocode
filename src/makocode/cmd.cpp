@@ -31,18 +31,19 @@ int cmd(int argc, const char** argv) {
                 MAKOCODE_DESCRIPTION);
 
         options_encode.add_options()
-                ("h,height", "Height.", cxxopts::value<int>())
-                ("w,width", "Width.", cxxopts::value<int>());
+                ("h,pageHeightDots", "Page Height Dots.", cxxopts::value<uint64_t>())
+                ("w,pageWidthDots", "Page Width Dots.", cxxopts::value<uint64_t>());
 
         auto result_encode = options_encode.parse(argc, argv);
 
-        int height;
-        int width;
+        uint64_t pageHeightDots = result_encode["pageHeightDots"].as<uint64_t>();
+        uint64_t pageWidthDots = result_encode["pageWidthDots"].as<uint64_t>();
 
-        height = result_encode["height"].as<int>();
-        width = result_encode["width"].as<int>();
+        EncoderParameters encoderParameters = EncoderParameters(
+                pageHeightDots,
+                pageWidthDots);
 
-        encode(height, width);
+        encode(encoderParameters);
     } else if (subprogram == DECODE_SUBPROGRAM) {
         decode();
     } else {
