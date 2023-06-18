@@ -10,16 +10,16 @@
 #include <iostream>
 #include <fstream>
 
-void encode(int height, int width) {
+void encode(EncoderParameters encoderParameters) {
     pcg64 rng(0);
 
     std::ofstream file;
     file.open ("image.ppm");
     int max_val = 255;
 
-    file << "P3\n" << width << "\n" << height << "\n" << max_val;
+    file << "P3\n" << encoderParameters.pageWidthDots << "\n" << encoderParameters.pageHeightDots << "\n" << max_val;
 
-    for (int i = 0; i < width * height * RGB_CHANNEL_COUNT; i++) {
+    for (int i = 0; i < encoderParameters.pageWidthDots * encoderParameters.pageHeightDots * RGB_CHANNEL_COUNT; i++) {
         if (i % RGB_CHANNEL_COUNT == 0) {
             file << "\n";
         }
