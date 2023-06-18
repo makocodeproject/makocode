@@ -11,12 +11,15 @@ class EncoderParameters {
     public:
         uint64_t pageHeightDots;
         uint64_t pageWidthDots;
+        uint16_t colorStates;
 
         EncoderParameters(
                 uint64_t pageHeightDots,
-                uint64_t pageWidthDots) {
+                uint64_t pageWidthDots,
+                uint16_t colorStates) {
             this->pageHeightDots = pageHeightDots;
             this->pageWidthDots = pageWidthDots;
+            this->colorStates = colorStates;
         }
 };
 
