@@ -10,10 +10,22 @@ void cmd_none() {
     assert(cmd(0, nullptr) == 1);
 }
 
-void cmd_encode_10_10() {
+void cmd_encode_no_color_states() {
     const char* argv[] = {"makocode", "encode", "-w", "10", "-h", "10"};
 
     assert(!cmd(6, argv));
+}
+
+void cmd_encode_all_arguments() {
+    const char* argv[] = {"makocode", "encode", "-c", "2", "-w", "10", "-h", "10"};
+
+    assert(!cmd(8, argv));
+}
+
+void cmd_encode_3_color_states() {
+    const char* argv[] = {"makocode", "encode", "-c", "3", "-w", "10", "-h", "10"};
+
+    assert(cmd(8, argv) == 1);
 }
 
 void cmd_decode() {
@@ -30,7 +42,9 @@ void cmd_unknown() {
 
 int main() {
     cmd_none();
-    cmd_encode_10_10();
+    cmd_encode_no_color_states();
+    cmd_encode_all_arguments();
+    cmd_encode_3_color_states();
     cmd_decode();
     cmd_unknown();
 }

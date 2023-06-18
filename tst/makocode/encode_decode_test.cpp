@@ -11,10 +11,13 @@
 void encode_decode_1000_1000() {
     uint64_t pageHeightDots = 1000;
     uint64_t pageWidthDots = 1000;
+    uint16_t colorStates = 2;
 
     EncoderParameters encoderParameters = EncoderParameters(
             pageHeightDots,
-            pageWidthDots);
+            pageWidthDots,
+            colorStates);
+
     encode(encoderParameters);
     int line_count = decode();
 
@@ -24,10 +27,12 @@ void encode_decode_1000_1000() {
 void encode_decode_100_100() {
     uint64_t pageHeightDots = 100;
     uint64_t pageWidthDots = 100;
+    uint16_t colorStates = 2;
 
     EncoderParameters encoderParameters = EncoderParameters(
             pageHeightDots,
-            pageWidthDots);
+            pageWidthDots,
+            colorStates);
 
     encode(encoderParameters);
     int line_count = decode();

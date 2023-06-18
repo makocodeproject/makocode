@@ -32,16 +32,25 @@ int cmd(int argc, const char** argv) {
 
         options_encode.add_options()
                 ("h,pageHeightDots", "Page Height Dots.", cxxopts::value<uint64_t>())
-                ("w,pageWidthDots", "Page Width Dots.", cxxopts::value<uint64_t>());
+                ("w,pageWidthDots", "Page Width Dots.", cxxopts::value<uint64_t>())
+                ("c,colorStates", "Color States.", cxxopts::value<uint16_t>()->default_value("2"));
 
         auto result_encode = options_encode.parse(argc, argv);
 
         uint64_t pageHeightDots = result_encode["pageHeightDots"].as<uint64_t>();
         uint64_t pageWidthDots = result_encode["pageWidthDots"].as<uint64_t>();
+        uint16_t colorStates = result_encode["colorStates"].as<uint16_t>();
+
+        if (colorStates != 2) {
+            std::cout << "Currently only 2 color states (black and white) are supported.";
+
+            return 1;
+        }
 
         EncoderParameters encoderParameters = EncoderParameters(
                 pageHeightDots,
-                pageWidthDots);
+                pageWidthDots,
+                colorStates);
 
         encode(encoderParameters);
     } else if (subprogram == DECODE_SUBPROGRAM) {

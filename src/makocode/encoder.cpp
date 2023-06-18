@@ -15,16 +15,20 @@ void encode(EncoderParameters encoderParameters) {
 
     std::ofstream file;
     file.open ("image.ppm");
-    int max_val = 255;
 
-    file << "P3\n" << encoderParameters.pageWidthDots << "\n" << encoderParameters.pageHeightDots << "\n" << max_val;
+    file << PPM_HEADER_MAGIC_NUMBER << "\n";
+    file << encoderParameters.pageWidthDots << "\n";
+    file << encoderParameters.pageHeightDots << "\n";
+    file << encoderParameters.colorStates - 1 << "\n";
 
-    for (int i = 0; i < encoderParameters.pageWidthDots * encoderParameters.pageHeightDots * RGB_CHANNEL_COUNT; i++) {
-        if (i % RGB_CHANNEL_COUNT == 0) {
-            file << "\n";
+    uint64_t dotCount = encoderParameters.pageWidthDots * encoderParameters.pageHeightDots;
+    for (int i = 0; i < dotCount; i++) {
+        uint64_t dotValue = (rng(encoderParameters.colorStates));
+
+        for (int j = 0; j < RGB_CHANNEL_COUNT; j++) {
+            file << dotValue << " ";
         }
-
-        file << uint64_t (rng(max_val + 1)) << " ";
+        file << "\n";
     }
 
     file.close();
