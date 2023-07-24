@@ -6,22 +6,7 @@
 #define MAKOCODE_ENCODER_H
 
 #include <cstdint>
-
-class EncoderParameters {
-    public:
-        uint64_t pageHeightDots;
-        uint64_t pageWidthDots;
-        uint16_t colorStates;
-
-        EncoderParameters(
-                uint64_t pageHeightDots,
-                uint64_t pageWidthDots,
-                uint16_t colorStates) {
-            this->pageHeightDots = pageHeightDots;
-            this->pageWidthDots = pageWidthDots;
-            this->colorStates = colorStates;
-        }
-};
+#include "encoder_parameters.hpp"
 
 void encode(EncoderParameters encoderParameters);
 

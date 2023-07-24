@@ -7,6 +7,7 @@
 #include "../../src/makocode/constants.hpp"
 #include "../../src/makocode/decoder.hpp"
 #include "../../src/makocode/encoder.hpp"
+#include "../../src/makocode/encoder_parameters.hpp"
 
 void encode_decode_1000_1000() {
     uint64_t pageHeightDots = 1000;

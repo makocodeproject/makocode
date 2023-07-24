@@ -2,6 +2,7 @@
 
 #include "decoder.hpp"
 #include "encoder.hpp"
+#include "encoder_parameters.hpp"
 #include "../cxxopts/cxxopts.hpp"
 
 #include <iostream>
@@ -47,10 +48,11 @@ int cmd(int argc, const char** argv) {
             return 1;
         }
 
-        EncoderParameters encoderParameters = EncoderParameters(
-                pageHeightDots,
-                pageWidthDots,
-                colorStates);
+        EncoderParameters encoderParameters = EncoderParameters::Builder()
+                .setPageHeightDots(pageHeightDots)
+                .setPageWidthDots(pageWidthDots)
+                .setColorStates(colorStates)
+                .build();
 
         encode(encoderParameters);
     } else if (subprogram == DECODE_SUBPROGRAM) {

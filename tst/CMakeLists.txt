@@ -6,6 +6,8 @@ add_executable(
         ../src/makocode/decoder.hpp
         ../src/makocode/encoder.cpp
         ../src/makocode/encoder.hpp
+        ../src/makocode/encoder_parameters.cpp
+        ../src/makocode/encoder_parameters.hpp
         ../src/pcg/pcg_extras.hpp
         ../src/pcg/pcg_random.hpp
         ../src/pcg/pcg_uint128.hpp
@@ -21,6 +23,8 @@ add_executable(
         ../src/makocode/decoder.hpp
         ../src/makocode/encoder.cpp
         ../src/makocode/encoder.hpp
+        ../src/makocode/encoder_parameters.cpp
+        ../src/makocode/encoder_parameters.hpp
         ../src/pcg/pcg_extras.hpp
         ../src/pcg/pcg_random.hpp
         ../src/pcg/pcg_uint128.hpp

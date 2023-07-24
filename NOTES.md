@@ -191,9 +191,10 @@ MakoCode Specification (draft):
         - Speeds up decoding as a form of predictable fiducial marking, especially when using data shuffling.
         - Can help to figure out the given page number for page-out-of-order fixing when using data shuffling, as the per-page data will usually have a predictable pattern.
         - Separate from metadata because it will potentially be very large, and can add unnecessary bits to the metadata address index.
+        - Usually used to pad data to fill up the last page. This is not covered in metadata, as the encoder will simply expand the fiducial data via address section. However, the command line option may provide a zero-padding option instead.
     - Data section
         - The actual body of data intended to be encoded by the data matrix.
-        - Starts with a 2 addresses of length address-size
+        - Starts with 2 addresses of length address-size
             - Where the Hash starts
             - Where the ECC starts
         - Then followed by the Data Payload, Hash, and ECC.
