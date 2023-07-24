@@ -1,5 +1,5 @@
 //
-// Created by justi on 6/17/2023.
+// Created by Justin Bass on 6/17/2023.
 //
 
 #ifndef MAKOCODE_CONSTANTS_HPP

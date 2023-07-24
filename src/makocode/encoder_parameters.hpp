@@ -1,5 +1,5 @@
 //
-// Created by justi on 7/23/2023.
+// Created by Justin Bass on 7/23/2023.
 //
 
 #ifndef MAKOCODE_ENCODER_PARAMETERS_HPP

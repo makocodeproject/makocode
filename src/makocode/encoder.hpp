@@ -1,5 +1,5 @@
 //
-// Created by justi on 6/7/2023.
+// Created by Justin Bass on 6/7/2023.
 //
 
 #ifndef MAKOCODE_ENCODER_H

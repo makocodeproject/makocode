@@ -1,5 +1,5 @@
 //
-// Created by justi on 6/8/2023.
+// Created by Justin Bass on 6/8/2023.
 //
 
 #include "cassert"
@@ -7,7 +7,6 @@
 #include "../../src/makocode/constants.hpp"
 #include "../../src/makocode/decoder.hpp"
 #include "../../src/makocode/encoder.hpp"
-#include "../../src/makocode/encoder_parameters.hpp"
 
 void encode_decode_1000_1000() {
     uint64_t pageHeightDots = 1000;
