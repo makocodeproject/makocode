@@ -16,7 +16,8 @@ void encode_decode_1000_1000() {
     EncoderParameters encoderParameters = EncoderParameters(
             pageHeightDots,
             pageWidthDots,
-            colorStates);
+            colorStates,
+            {0, 1, 0, 1, 0});
 
     encode(encoderParameters);
     int line_count = decode();
@@ -32,7 +33,8 @@ void encode_decode_100_100() {
     EncoderParameters encoderParameters = EncoderParameters(
             pageHeightDots,
             pageWidthDots,
-            colorStates);
+            colorStates,
+            {0, 1, 0, 1, 0});
 
     encode(encoderParameters);
     int line_count = decode();

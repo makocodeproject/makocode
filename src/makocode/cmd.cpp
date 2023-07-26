@@ -11,6 +11,8 @@ int cmd(int argc, const char** argv) {
     const std::string ENCODE_SUBPROGRAM = "encode";
     const std::string DECODE_SUBPROGRAM = "decode";
 
+    const std::string DATA_PAYLOAD_FILE_LOCATION_ARGUMENT = "dataPayloadFileLocation";
+
     const std::string USAGE_STRING =
             "Usage:\n" \
             "  makocode <encode|decode> [OPTION...]\n";
@@ -34,27 +36,33 @@ int cmd(int argc, const char** argv) {
         options_encode.add_options()
                 ("h,pageHeightDots", "Page Height Dots.", cxxopts::value<uint64_t>())
                 ("w,pageWidthDots", "Page Width Dots.", cxxopts::value<uint64_t>())
-                ("c,colorStates", "Color States.", cxxopts::value<uint16_t>()->default_value("2"));
+                ("c,colorStates", "Color States.", cxxopts::value<uint16_t>()->default_value("2"))
+                ("f,dataPayloadFileLocation", "Data payload file location.", cxxopts::value<std::string>());
 
         auto result_encode = options_encode.parse(argc, argv);
 
-        uint64_t pageHeightDots = result_encode["pageHeightDots"].as<uint64_t>();
-        uint64_t pageWidthDots = result_encode["pageWidthDots"].as<uint64_t>();
-        uint16_t colorStates = result_encode["colorStates"].as<uint16_t>();
+        EncoderParameters::Builder encoderParametersBuilder = EncoderParameters::Builder();
 
+        uint64_t pageHeightDots = result_encode["pageHeightDots"].as<uint64_t>();
+        encoderParametersBuilder.setPageHeightDots(pageHeightDots);
+
+        uint64_t pageWidthDots = result_encode["pageWidthDots"].as<uint64_t>();
+        encoderParametersBuilder.setPageWidthDots(pageWidthDots);
+
+        uint16_t colorStates = result_encode["colorStates"].as<uint16_t>();
         if (colorStates != 2) {
             std::cout << "Currently only 2 color states (black and white) are supported.";
 
             return 1;
         }
+        encoderParametersBuilder.setColorStates(colorStates);
 
-        EncoderParameters encoderParameters = EncoderParameters::Builder()
-                .setPageHeightDots(pageHeightDots)
-                .setPageWidthDots(pageWidthDots)
-                .setColorStates(colorStates)
-                .build();
+        if (result_encode.count(DATA_PAYLOAD_FILE_LOCATION_ARGUMENT)) {
+            std::string dataPayloadFileLocation = result_encode[DATA_PAYLOAD_FILE_LOCATION_ARGUMENT].as<std::string>();
+            encoderParametersBuilder.setDataPayload(dataPayloadFileLocation);
+        }
 
-        encode(encoderParameters);
+        encode(encoderParametersBuilder.build());
     } else if (subprogram == DECODE_SUBPROGRAM) {
         decode();
     } else {

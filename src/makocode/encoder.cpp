@@ -22,11 +22,19 @@ void encode(EncoderParameters encoderParameters) {
     file << encoderParameters.colorStates - 1 << "\n";
 
     uint64_t dotCount = encoderParameters.pageWidthDots * encoderParameters.pageHeightDots;
-    for (int i = 0; i < dotCount; i++) {
-        uint64_t dotValue = (rng(encoderParameters.colorStates));
 
+    // Write data
+    for(uint8_t data : encoderParameters.dataPayload) {
         for (int j = 0; j < RGB_CHANNEL_COUNT; j++) {
-            file << dotValue << " ";
+            file << data << " ";
+        }
+        file << "\n";
+    }
+
+    // Pad with 1's
+    for(int i = 0; i < dotCount - encoderParameters.dataPayload.size(); i++) {
+        for (int j = 0; j < RGB_CHANNEL_COUNT; j++) {
+            file << 1 << " ";
         }
         file << "\n";
     }
